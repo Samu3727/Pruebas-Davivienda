@@ -12,8 +12,9 @@ function CrearNota() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/notas", {
+      await axios.post("/api/notas", {
         titulo,
+        descripcion,
         contenido,
       });
       Swal.fire("Éxito", "Nota creada exitosamente", "success");
@@ -24,37 +25,45 @@ function CrearNota() {
   };
 
   return (
-    <div>
-      <h2>Crear Nota</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Título:</label>
-          <input
-            type="text"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-            <label>Descripción:</label>
+    <div className="card mx-auto" style={{ maxWidth: 760 }}>
+      <div className="card-body">
+        <h2 className="card-title">Crear Nota</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Título</label>
             <input
               type="text"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
+              className="form-control"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
               required
             />
-        </div>
-        <div>
-          <label>Contenido:</label>
-          <textarea
-            value={contenido}
-            onChange={(e) => setContenido(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Crear Nota</button>
-      </form>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Descripción</label>
+            <input
+              type="text"
+              className="form-control"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Contenido</label>
+            <textarea
+              className="form-control"
+              value={contenido}
+              onChange={(e) => setContenido(e.target.value)}
+              rows={6}
+              required
+            />
+          </div>
+          <div className="d-flex gap-2">
+            <button type="submit" className="btn btn-primary">Crear Nota</button>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/notas')}>Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

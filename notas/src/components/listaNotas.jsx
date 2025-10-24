@@ -6,12 +6,18 @@ function ListaNotas() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const controller = new AbortController();
-    fetch('http://localhost:3000/api/notas', { signal: controller.signal })
+  const controller = new AbortController();
+    fetch('/api/notas', { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`Error al obtener notas: ${res.status}`);
-        return res.json();
+        const ct = res.headers.get('content-type') || '';
+        if (ct.includes('application/json')) return res.json();
+        return res.text().then((txt) => {
+          throw new Error(`Se esperaba JSON pero el servidor devolvió: ${txt.slice(0, 500)}`);
+        });
       })
       .then((data) => setNotas(data))
       .catch((err) => {
@@ -22,18 +28,15 @@ function ListaNotas() {
     return () => controller.abort();
   }, []);
 
-  if (loading) return <div>Cargando notas...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  const navigate = useNavigate();
+  if (loading) return <div className="text-center">Cargando notas...</div>;
+  if (error) return <div className="alert alert-danger">Error: {error}</div>;
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm('¿Eliminar nota? Esto la marcará como eliminada (soft delete).');
     if (!confirmed) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/notas/${id}`, { method: 'DELETE' });
+  const res = await fetch(`/api/notas/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`Error eliminando nota: ${res.status}`);
-      // eliminar localmente
       setNotas((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
       alert('Error al eliminar la nota: ' + err.message);
@@ -45,46 +48,30 @@ function ListaNotas() {
   };
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>Lista de Notas</h2>
-        <Link to="/crear-nota">Crear nueva nota</Link>
+    <div>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2 className="m-0">Lista de Notas</h2>
+        <Link className="btn btn-success" to="/crear-nota">Crear nueva nota</Link>
       </div>
 
       {notas.length === 0 ? (
-        <p>No hay notas para mostrar.</p>
+        <div className="alert alert-info">No hay notas para mostrar.</div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+        <div className="row g-3">
           {notas.map((nota) => (
-            <article
-              key={nota.id}
-              style={{
-                border: '1px solid #ddd',
-                borderRadius: 8,
-                padding: 12,
-                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-                background: '#fff',
-              }}
-            >
-              <h3 style={{ margin: '0 0 8px' }}>{nota.titulo || 'Sin título'}</h3>
-              {nota.descripcion && <p style={{ margin: '0 0 8px', color: '#555' }}>{nota.descripcion}</p>}
-              {nota.contenido && <p style={{ margin: '0 0 12px' }}>{nota.contenido}</p>}
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button
-                  onClick={() => handleEdit(nota.id)}
-                  style={{ background: '#1976d2', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 4, cursor: 'pointer' }}
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(nota.id)}
-                  style={{ background: '#e53935', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 4, cursor: 'pointer' }}
-                  aria-label={`Eliminar nota ${nota.id}`}
-                >
-                  Eliminar
-                </button>
-              </div>
-            </article>
+            <div className="col-sm-6 col-md-4" key={nota.id}>
+              <article className="card h-100">
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title">{nota.titulo || 'Sin título'}</h5>
+                  {nota.descripcion && <h6 className="card-subtitle mb-2 text-muted">{nota.descripcion}</h6>}
+                  {nota.contenido && <p className="card-text">{nota.contenido}</p>}
+                  <div className="mt-auto d-flex gap-2">
+                    <button className="btn btn-primary btn-sm" onClick={() => handleEdit(nota.id)}>Editar</button>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(nota.id)} aria-label={`Eliminar nota ${nota.id}`}>Eliminar</button>
+                  </div>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
       )}

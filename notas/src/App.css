@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+/* Small visual tweaks to complement Bootstrap */
+body {
+  background-color: #f6f7fb;
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.card-title {
+  margin-bottom: 12px;
+}
