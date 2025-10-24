@@ -1,0 +1,27 @@
+drop database if exists notes;
+
+create database notes;
+
+use notes;
+
+create table notas (
+
+	id int auto_increment primary key,
+    titulo varchar(100),
+    descripcion varchar(500),
+    contenido varchar(10000),
+    estado tinyint default 1
+);
+
+create table usuarios (
+
+	id int auto_increment primary key,
+    correo varchar(100),
+    contrasena varchar(255)
+);
+
+insert into usuarios (correo, contrasena) values ('Samu@gmail.com', 'Samu123');
+
+select * from usuarios;
+
+select * from notas;
