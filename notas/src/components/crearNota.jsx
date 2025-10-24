@@ -5,13 +5,14 @@ import Swal from "sweetalert2";
 
 function CrearNota() {
   const [titulo, setTitulo] = useState("");
+    const [descripcion, setDescripcion] = useState("");
   const [contenido, setContenido] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/notas", {
+      await axios.post("http://localhost:3000/api/notas", {
         titulo,
         contenido,
       });
@@ -34,6 +35,15 @@ function CrearNota() {
             onChange={(e) => setTitulo(e.target.value)}
             required
           />
+        </div>
+        <div>
+            <label>Descripción:</label>
+            <input
+              type="text"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              required
+            />
         </div>
         <div>
           <label>Contenido:</label>

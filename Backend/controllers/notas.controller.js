@@ -26,6 +26,17 @@ const obtenerNotaPorId = async (req, res) => {
     }   
 };
 
+const obtenerTodasNotas = async (req, res) => {
+    try {
+        // Seleccionamos notas activas (estado = 1) o sin campo estado
+        const [notas] = await db.query('SELECT * FROM notas WHERE estado IS NULL OR estado = 1');
+        res.status(200).json(notas);
+    } catch (error) {
+        console.error('Error al obtener notas:', error);
+        res.status(500).json({ error: 'Error al obtener notas' });
+    }
+};
+
 const actualizarNota = async (req, res) => {
     const { id } = req.params;
     const { titulo, descripcion, contenido } = req.body;
@@ -58,6 +69,7 @@ const deleteSoftNota = async (req, res) => {
 module.exports = {
     crearNota,
     obtenerNotaPorId,
+    obtenerTodasNotas,
     actualizarNota,
     deleteSoftNota
 };
