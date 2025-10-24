@@ -12,8 +12,15 @@ function EditarNota() {
 
   useEffect(() => {
     let mounted = true;
-    fetch(`/api/notas/${id}`)
+    const token = localStorage.getItem('auth_token');
+    fetch(`/api/notas/${id}`, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then((res) => {
+        if (res.status === 401) {
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('auth_user');
+          navigate('/login', { replace: true });
+          throw new Error('No autorizado');
+        }
         if (!res.ok) throw new Error(`Nota no encontrada: ${res.status}`);
         const ct = res.headers.get('content-type') || '';
         if (ct.includes('application/json')) return res.json();
@@ -33,14 +40,15 @@ function EditarNota() {
     return () => {
       mounted = false;
     };
-  }, [id]);
+  }, [id, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('auth_token');
       const res = await fetch(`/api/notas/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
         body: JSON.stringify({ titulo, descripcion, contenido }),
       });
       if (!res.ok) {

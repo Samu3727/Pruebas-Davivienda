@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Notas — Pruebas Davivienda
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este paquete contiene la aplicación frontend de notas usada en las pruebas para Davivienda.
 
-## Available Scripts
+Resumen
+-------
+Aplicación web simple para crear, editar y listar notas. Está construida con Create React App y se conecta a un servicio backend que gestiona el almacenamiento y las operaciones sobre las notas.
 
-In the project directory, you can run:
+Estructura relevante
+---------------------
+- `../Backend/` — servidor (API) que expone los endpoints para manejar notas.
+- `.` (carpeta `notas`) — aplicación frontend React (UI) que consume la API.
 
-### `npm start`
+Tecnologías
+----------
+- Frontend: React (Create React App), JavaScript, JSX
+- Backend: Node.js + Express (en la carpeta `Backend`)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Requisitos
+---------
+- Node.js (v14+ recomendado)
+- npm
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Instalación y ejecución (Windows PowerShell)
+-------------------------------------------
+1. Instalar dependencias del backend y ejecutarlo (desde la raíz del proyecto):
 
-### `npm test`
+```powershell
+cd Backend; npm install; node index.js
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Instalar dependencias del frontend y arrancar la app (desde `notas`):
 
-### `npm run build`
+```powershell
+cd notas; npm install; npm run start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Notas:
+- Asegúrate de que el backend esté corriendo antes de abrir el frontend, ya que la app de notas depende de la API para leer/guardar datos.
+- Si la app usa `npm run dev` en tu proyecto, sustitúyelo por el script que tengas configurado (`start` o `dev`).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Uso
+---
+Una vez arrancado el frontend, abre tu navegador en `http://localhost:3000` (o en el puerto que indique la terminal). La interfaz permite:
+- Crear nuevas notas
+- Listar notas existentes
+- Editar y eliminar notas
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Contribuir
+----------
+Si quieres colaborar:
+1. Haz un fork y crea una rama con tu cambio.
+2. Asegúrate de que el backend y el frontend sigan funcionando.
+3. Abre un pull request describiendo los cambios.
 
-### `npm run eject`
+Contacto / Autor
+----------------
+Proyecto preparado por el equipo de pruebas (repositorio: Pruebas-Davivienda). Para dudas abre un issue en el repositorio.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Licencia
+--------
+Licencia MIT — ver el archivo `LICENSE` si existe.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+Este README sustituye el contenido por defecto generado por Create React App para ofrecer una descripción del proyecto y pasos básicos para ejecutar la aplicación.

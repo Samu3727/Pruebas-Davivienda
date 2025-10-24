@@ -12,11 +12,12 @@ function CrearNota() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('auth_token');
       await axios.post("/api/notas", {
         titulo,
         descripcion,
         contenido,
-      });
+      }, { headers: { Authorization: token ? `Bearer ${token}` : '' } });
       Swal.fire("Éxito", "Nota creada exitosamente", "success");
       navigate("/notas");
     } catch (error) {

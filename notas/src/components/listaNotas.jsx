@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getToken, clearAuth } from '../utils/auth';
 
 function ListaNotas() {
   const [notas, setNotas] = useState([]);
@@ -10,8 +11,15 @@ function ListaNotas() {
 
   useEffect(() => {
   const controller = new AbortController();
-    fetch('/api/notas', { signal: controller.signal })
+    const token = getToken();
+    fetch('/api/notas', { signal: controller.signal, headers: { Authorization: token ? `Bearer ${token}` : '' } })
       .then((res) => {
+        if (res.status === 401) {
+          // token inválido o expirado
+          clearAuth();
+          navigate('/login', { replace: true });
+          throw new Error('No autorizado');
+        }
         if (!res.ok) throw new Error(`Error al obtener notas: ${res.status}`);
         const ct = res.headers.get('content-type') || '';
         if (ct.includes('application/json')) return res.json();
@@ -26,7 +34,7 @@ function ListaNotas() {
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, []);
+  }, [navigate]);
 
   if (loading) return <div className="text-center">Cargando notas...</div>;
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
@@ -35,7 +43,8 @@ function ListaNotas() {
     const confirmed = window.confirm('¿Eliminar nota? Esto la marcará como eliminada (soft delete).');
     if (!confirmed) return;
     try {
-  const res = await fetch(`/api/notas/${id}`, { method: 'DELETE' });
+      const token = getToken();
+      const res = await fetch(`/api/notas/${id}`, { method: 'DELETE', headers: { Authorization: token ? `Bearer ${token}` : '' } });
       if (!res.ok) throw new Error(`Error eliminando nota: ${res.status}`);
       setNotas((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
