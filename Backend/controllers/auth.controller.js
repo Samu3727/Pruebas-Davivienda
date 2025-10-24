@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret_for_prod';
 const JWT_EXPIRES_IN = '2h';
 
-// Registro de usuario (hash de password)
-// Adaptado a la tabla `usuarios` con columnas (id, correo, contrasena)
 const register = async (req, res) => {
     const correo = req.body.email || req.body.correo;
     const contrasena = req.body.password || req.body.contrasena;
@@ -33,9 +31,7 @@ const register = async (req, res) => {
     }
 };
 
-// Login: compara hash y devuelve JWT
 const login = async (req, res) => {
-    // Accept both english and spanish keys
     const correo = req.body.email || req.body.correo;
     const contrasena = req.body.password || req.body.contrasena;
     if (!correo || !contrasena) {
@@ -51,11 +47,9 @@ const login = async (req, res) => {
         const user = rows[0];
         const hash = user.contrasena;
         let match = false;
-        // If stored password looks like a bcrypt hash (starts with $2), compare with bcrypt
         if (typeof hash === 'string' && hash.startsWith('$2')) {
             match = await bcrypt.compare(contrasena, hash);
         } else {
-            // fallback: compare plaintext (for seeded data)
             match = contrasena === hash;
         }
 

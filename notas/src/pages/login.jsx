@@ -10,7 +10,6 @@ export default function Login({ onLogin }) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// If already authenticated, go to notas
 		if (getToken()) navigate('/notas', { replace: true });
 	}, [navigate]);
 
@@ -25,7 +24,6 @@ export default function Login({ onLogin }) {
 				body: JSON.stringify({ email: correo, password: contrasena })
 			});
 
-			// Manejar correctamente respuestas no JSON (p. ej. HTML de error) para evitar SyntaxError
 			const contentType = res.headers.get('content-type') || '';
 			let data = null;
 			if (contentType.includes('application/json')) {
@@ -41,7 +39,6 @@ export default function Login({ onLogin }) {
 				return;
 			}
 
-						// Login exitoso: guardamos token y usuario, redirigimos a notas
 						if (data.token) {
 							setToken(data.token);
 						}

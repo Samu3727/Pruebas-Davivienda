@@ -20,7 +20,6 @@ export default function Register({ onLogin }) {
         body: JSON.stringify({ correo, contrasena })
       });
 
-      // Manejo seguro de respuestas que no son JSON (ej. "Proxy error" HTML)
       const contentType = res.headers.get('content-type') || '';
       let data = null;
       let text = null;
