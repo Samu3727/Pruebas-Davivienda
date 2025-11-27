@@ -1,0 +1,12 @@
+{
+  "name": "pruebas-davivienda",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix Backend start",
+    "postinstall": "npm --prefix Backend ci --no-audit --no-fund"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
